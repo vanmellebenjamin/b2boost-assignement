@@ -5,7 +5,7 @@
 
 .gradle
 .asscache
-build
+build/
 out
 logs
 classes

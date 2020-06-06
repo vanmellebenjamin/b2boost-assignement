@@ -6,6 +6,20 @@
 
 A running docker agent with an internet connection
 
+## Checklist
+
+- [ ] The endpoint will return custom error JSON messages in the payload, additionally to the standard HTTP response codes
+- [ ] The controller of the endpoint will not contain any business logic, and will limit itself to
+- [ ] marshalling data from the http layer to the service layer (using grails Command objects)
+- [ ] reporting error conditions in the response
+- [ ] marshalling results back to the http layer, including custom errors
+- [ ] The service layer will be transactional and encapsulate all validation and database interactions
+- [ ] The application will run with an embedded H2 in-memory database
+- [ ] The application will have a health check endpoint
+- [ ] The application will have suitable functional tests
+- [ ] No authentication/security necessary
+
+
 ## Installation
 
 OS X & Linux & Windows:
@@ -38,7 +52,7 @@ OS X & Linux (not verify yet):
 docker run -it --mount type=bind,src=$(pwd)/grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=$(pwd)/src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
 ```
 
-Alternatively, if you wish to develop in you own env, you need to install jdk8 and grails 4.0.1; 
+Alternatively, if you wish to develop in you own env, you need to install jdk8 and grails 4.0.3; 
 See: http://docs.grails.org/latest/guide/gettingStarted.html
 
 Run the tests:
