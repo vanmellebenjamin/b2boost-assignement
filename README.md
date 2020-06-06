@@ -38,7 +38,7 @@ OS X & Linux (not verify yet):
 docker run -it --mount type=bind,src=$(pwd)/grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=$(pwd)/src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
 ```
 
-Alternatively, if you wish to develop in you own env, you need to install jdk8 and grails 4.1.0M1; 
+Alternatively, if you wish to develop in you own env, you need to install jdk8 and grails 4.0.1; 
 See: http://docs.grails.org/latest/guide/gettingStarted.html
 
 Run the tests:
@@ -49,13 +49,6 @@ Start the App:
 ```sh
 grails run-app
 ```
-
-## Issues
-```
-java.lang.IllegalAccessError: tried to access method grails.boot.GrailsApp.configureDirectoryWatcher(Lorg/grails/io/watch/DirectoryWatcher;Ljava/lang/String;)V from class grails.boot.GrailsApp$configureDirectoryWatcher$0
-```
-- https://github.com/grails/grails-core/issues/11557
-
 
 ## Contact
 
