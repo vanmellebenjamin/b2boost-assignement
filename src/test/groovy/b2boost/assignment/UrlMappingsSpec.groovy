@@ -1,4 +1,4 @@
-package b2boost.assignment.mapping
+package b2boost.assignment
 
 import b2boost.assignment.partner.PartnerController
 import grails.testing.web.UrlMappingsUnitTest

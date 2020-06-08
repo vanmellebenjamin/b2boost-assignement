@@ -1,28 +1,18 @@
 package b2boost.assignment.partner
 
+import grails.gorm.services.Service;
+import groovy.transform.CompileStatic;
 
-import grails.gorm.transactions.Transactional
+@CompileStatic
+@Service(Partner)
+interface PartnerDataService {
 
-@Transactional
-class PartnerDataService {
+    Partner get(Serializable id)
 
-    Partner save(PartnerCO partnerInfo) {
-        new Partner(
-            companyName: partnerInfo.name,
-            ref: partnerInfo.reference,
-            locale: partnerInfo.locale,
-            expires: partnerInfo.expirationTime).save()
-    }
+    List<Partner> list(Map args)
 
-    @Transactional(readOnly = true)
-    Partner find(Serializable id) {
-        Partner.get(id)
-    }
+    void delete(Serializable id)
 
-    @Transactional(readOnly = true)
-    Partner[] findAll(Map queryParams) {
-        Partner.findAll(queryParams)
-    }
+    Partner save(Partner booking)
 
 }
-

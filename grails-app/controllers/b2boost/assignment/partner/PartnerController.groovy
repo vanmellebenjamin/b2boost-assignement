@@ -1,4 +1,6 @@
 package b2boost.assignment.partner
+
+import grails.validation.ValidationException
 import org.springframework.http.HttpStatus
 
 class PartnerController {
@@ -12,7 +14,8 @@ class PartnerController {
     }
 
     def show() {
-        Partner partner = partnerDataService.find(params.id)
+        log.info "show"
+        partner = partnerDataService.find(params.id)
         if (partner == null) {
             render status: HttpStatus.NOT_FOUND
             return
@@ -20,24 +23,19 @@ class PartnerController {
         respond partner
     }
 
-    def save(PartnerCO partnerInfo) {
+    def save(PartnerCommand partnerCommand) {
         log.info "save"
-        if (partnerInfo == null) {
-            render status: HttpStatus.NOT_FOUND
-            return
+        try {
+            partner = partnerDataService.save(partnerCommand as Partner)
+            respond partner, status: HttpStatus.CREATED
+        } catch (ValidationException e) {
+            respond e, status: HttpStatus.BAD_REQUEST
         }
-
-        if (partnerInfo.hasErrors()) {
-            respond partnerInfo.errors
-            return
-        }
-        Partner partner = partnerDataService.save(partnerInfo)
-        respond partner, status: HttpStatus.CREATED
     }
 
-    def update(PartnerCO partnerInfo) {
+    def update(PartnerCommand partnerCommand) {
         log.info "update"
-        if (partnerInfo == null) {
+        if (partnerCommand == null) {
             render status: HttpStatus.BAD_REQUEST
             return
         }
@@ -46,12 +44,12 @@ class PartnerController {
             render status: HttpStatus.NOT_FOUND
             return
         }
-
         partner.properties = partnerEdit.properties
         respond partner.save
     }
 
     def delete() {
+        log.info "delete"
         Partner partner = partnerDataService.find(params.id)
         if (partner == null) {
             render status: HttpStatus.NOT_FOUND
