@@ -1,11 +1,8 @@
-package b2boost.assignment
+package b2boost.assignment.partner
 
 import grails.test.hibernate.HibernateSpec
 
 import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
-
 
 /**
  * The HibernateSpec super class will wrap each test method in a

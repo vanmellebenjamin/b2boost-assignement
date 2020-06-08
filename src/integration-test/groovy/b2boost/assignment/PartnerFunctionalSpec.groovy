@@ -1,5 +1,6 @@
 package b2boost.assignment
 
+import b2boost.assignment.partner.Partner
 import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
 import grails.testing.spock.OnceBefore
@@ -54,13 +55,15 @@ class PartnerFunctionalSpec extends Specification {
         HttpResponse<List<Map>> response = client.toBlocking()
                 .exchange(HttpRequest.GET(resourcePath), Argument.of(List, Map))
 
-        then: 'The response is OK with an empty body'
+        then: 'The response is OK with an empty JSON array'
         response.status == HttpStatus.OK
         response.body() == []
+        response.headers
+        response.headers.nettyHeaders.headers.get("Content-Type")
+                .contains("application/json")
     }
 
     @SuppressWarnings('MethodName')
-    @Rollback
     void 'Test the show action correctly renders an instance'() {
         when: 'The save action is executed with valid data'
         HttpResponse<Map> response = client.toBlocking().exchange(HttpRequest.POST(resourcePath, validJson), Map)
@@ -74,9 +77,11 @@ class PartnerFunctionalSpec extends Specification {
         String path = "${resourcePath}/${id}"
         response = client.toBlocking().exchange(HttpRequest.GET(path), Map)
 
-        then: 'The response is correct'
+        then: 'The response is correct and in JSON'
         response.status == HttpStatus.OK
         response.body().id == id
+        response.headers.nettyHeaders.headers.get("Content-Type")
+                .contains("application/json")
     }
 
     @SuppressWarnings('MethodName')
@@ -99,10 +104,12 @@ class PartnerFunctionalSpec extends Specification {
         when: 'The save action is executed with valid data'
         HttpResponse<Map> response = client.toBlocking().exchange(HttpRequest.POST(resourcePath, validJson), Map)
 
-        then: 'The response is correct'
+        then: 'The response is correct and in JSON'
         response.status == HttpStatus.CREATED
         response.body().id
-        Partner.count() == old(Partner.count()) + 1
+        Partner.count() == 1
+        response.headers.nettyHeaders.headers.get("Content-Type")
+                .contains("application/json")
 
 //        cleanup:
 //        def id = response.body().id

@@ -1,9 +1,9 @@
-package b2boost.assignment.command
+package b2boost.assignment.partner
 
 import grails.databinding.BindingFormat
 import grails.validation.Validateable
 
-class PartnerInfo implements Validateable {
+class PartnerCO implements Validateable {
     String name
     String reference
     Locale locale

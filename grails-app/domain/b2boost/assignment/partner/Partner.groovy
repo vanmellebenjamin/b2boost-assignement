@@ -1,4 +1,4 @@
-package b2boost.assignment
+package b2boost.assignment.partner
 
 import grails.compiler.GrailsCompileStatic
 

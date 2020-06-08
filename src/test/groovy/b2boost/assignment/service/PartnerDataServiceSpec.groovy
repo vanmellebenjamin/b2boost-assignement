@@ -1,9 +1,8 @@
-package b2boost.assignment
+package b2boost.assignment.service
 
-import grails.test.hibernate.HibernateSpec
-import spock.lang.Shared
+import spock.lang.Specification
 
-class PartnerDataServiceSpec extends HibernateSpec {
+class PartnerDataServiceSpec extends Specification {
 //
 //    @Shared
 //    PartnerDataService partnerDataService
