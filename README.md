@@ -1,6 +1,7 @@
 # B2Boost Assignment 
-> Benjamin Van Melle - June 2020
-> - https://b2boost.bitbucket.io/grails-problem-1/
+> https://b2boost.bitbucket.io/grails-problem-1/
+
+[![Grails Version][grails-image]][grails-url]
 
 ## Requirements
 
@@ -31,11 +32,11 @@ Once Grails command line open, you can then run grails commands:
 - run-app
 - test-app	
 - test-app --integration
-- package (Mount a volume on Docker to get the output)
+- package (You need to mount a volume on Docker to get the build output)
 
 ## Health check
 
-Can be reached on the following URL: /actuator/health
+Standard SpringBoot HealthCheck can be reached at the URL: /actuator/health
 
 ## Partners API
 
@@ -71,3 +72,7 @@ grails run-app
 ## Contact
 
 Benjamin Van Melle – [@LinkedIn](https://www.linkedin.com/in/benjaminvm/) – vanmelle.benjamin@gmail.com
+
+<!-- Markdown link & img dfn's -->
+[grails-image]: https://img.shields.io/badge/Grails-4.0.3-blue
+[grails-url]: https://docs.grails.org/4.0.3/guide/single.html
