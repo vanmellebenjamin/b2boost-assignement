@@ -1,11 +1,12 @@
 *.iml
 *.ipr
 *.iws
-.idea
+.idea/
 
-.gradle
+.gradle/
 .asscache
 build/
 out
 logs
 classes
+test-results/

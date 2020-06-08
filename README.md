@@ -33,7 +33,11 @@ Once Grails command line open, you can then run grails commands:
 - test-app --integration
 - package (Mount a volume on Docker to get the output)
 
-## Usage example
+## Health check
+
+Can be reached on the following URL: /actuator/health
+
+## Partners API
 
 ```sh
 curl http://localhost:8080/..
@@ -45,11 +49,11 @@ You may want to mount local volume on the container to get the changes live. In 
 
 Windows:
 ```sh
-docker run -it --mount type=bind,src=%CD%\grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=%CD%\src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
+docker run -it --mount type=bind,src=%CD%\test-results,dst=/usr/b2b-rest-app/build/test-results --mount type=bind,src=%CD%\build.gradle,dst=/usr/b2b-rest-app/build.gradle --mount type=bind,src=%CD%\grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=%CD%\src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
 ```
 OS X & Linux (not verify yet):
 ```sh
-docker run -it --mount type=bind,src=$(pwd)/grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=$(pwd)/src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
+docker run -it --mount type=bind,src=$(pwd)/test-results,dst=/usr/b2b-rest-app/build/test-results --mount type=bind,src=$(pwd)/build.gradle,dst=/usr/b2b-rest-app/build.gradle --mount type=bind,src=$(pwd)/grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=$(pwd)/src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
 ```
 
 Alternatively, if you wish to develop in you own env, you need to install jdk8 and grails 4.0.3; 

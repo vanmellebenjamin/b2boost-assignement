@@ -1,0 +1,14 @@
+import b2boost.assignment.Partner
+
+model {
+	Partner partner
+}
+
+// todo parse date here ?
+json {
+    id partner.id
+    name partner.companyName
+    reference partner.ref
+    locale partner.locale
+    expirationTime new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(partner.expires)
+}

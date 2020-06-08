@@ -5,4 +5,4 @@ ENV GRAILS_HOME=/usr/lib/grails-4.0.3
 ENV PATH=$PATH:$GRAILS_HOME/bin
 WORKDIR /usr/b2b-rest-app
 ADD . .
-RUN grails package > /dev/null
+RUN grails package
