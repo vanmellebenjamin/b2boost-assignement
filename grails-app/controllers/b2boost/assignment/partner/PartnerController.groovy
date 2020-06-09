@@ -3,6 +3,7 @@ package b2boost.assignment.partner
 import org.springframework.http.HttpStatus
 
 class PartnerController {
+    static responseFormats = ['json']
 
     def partnerService
 

@@ -32,7 +32,6 @@ class PartnerFunctionalSpec extends Specification {
     @OnceBefore
     void init() {
         String baseUrl = "http://localhost:$serverPort"
-        print baseUrl
         client  = HttpClient.create(new URL(baseUrl))
         populateSampleData()
     }
@@ -199,7 +198,7 @@ class PartnerFunctionalSpec extends Specification {
             e.response.status == HttpStatus.BAD_REQUEST
             e.response.body().code == 400
             e.response.body().message == "Property [locale] of class [class b2boost.assignment.partner.PartnerCommand] " +
-                    "with value [en] does not pass custom validation (country is mandatory). "
+                    "with value [en] does not pass custom validation (country and language are mandatory). "
             e.response.headers.get("Content-Type")
                 .contains("application/json")
     }
@@ -308,7 +307,7 @@ class PartnerFunctionalSpec extends Specification {
             e.response.status == HttpStatus.BAD_REQUEST
             e.response.body().code == 400
             e.response.body().message == "Property [locale] of class [class b2boost.assignment.partner.PartnerCommand] " +
-                    "with value [en] does not pass custom validation (country is mandatory). "
+                    "with value [en] does not pass custom validation (country and language are mandatory). "
             e.response.headers.get("Content-Type")
                     .contains("application/json")
     }

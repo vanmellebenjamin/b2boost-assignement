@@ -6,6 +6,7 @@
 .gradle/
 .asscache
 build/
+reports/
 out/
 logs/
 classes/

@@ -29,11 +29,17 @@ A running docker agent with an internet connection. The Port 8080, must be avail
 
 ## Installation
 
-OS X & Linux & Windows (to execute in the project directory):
+Windows (to execute in the project directory):
 ```sh
 docker build -t bvanmelle/b2b-assignment .
-docker run -it -p 8080:8080 bvanmelle/b2b-assignment
+docker run -it -p 8080:8080 --mount type=bind,src=%CD%\reports,dst=/usr/b2b-rest-app/build/reports bvanmelle/b2b-assignment
 ```
+OS X & Linux (to execute in the project directory, NOT TESTED):
+```sh
+docker build -t bvanmelle/b2b-assignment .
+docker run -it -p 8080:8080 --mount type=bind,src=$(pwd)/reports,dst=/usr/b2b-rest-app/build/reports bvanmelle/b2b-assignment
+```
+
 Once Grails command line open, you can then run grails commands:
 - run-app
 - test-app	
@@ -50,11 +56,11 @@ You may want to mount local volume on the container to get the changes live. In 
 
 Windows:
 ```sh
-docker run -it --mount type=bind,src=%CD%\test-results,dst=/usr/b2b-rest-app/build/test-results --mount type=bind,src=%CD%\build.gradle,dst=/usr/b2b-rest-app/build.gradle --mount type=bind,src=%CD%\grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=%CD%\src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
+docker run -it --mount type=bind,src=%CD%\reports,dst=/usr/b2b-rest-app/build/reports --mount type=bind,src=%CD%\build.gradle,dst=/usr/b2b-rest-app/build.gradle --mount type=bind,src=%CD%\grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=%CD%\src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
 ```
-OS X & Linux (not verify yet):
+OS X & Linux (not tested):
 ```sh
-docker run -it --mount type=bind,src=$(pwd)/test-results,dst=/usr/b2b-rest-app/build/test-results --mount type=bind,src=$(pwd)/build.gradle,dst=/usr/b2b-rest-app/build.gradle --mount type=bind,src=$(pwd)/grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=$(pwd)/src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
+docker run -it --mount type=bind,src=$(pwd)/reports,dst=/usr/b2b-rest-app/build/reports --mount type=bind,src=$(pwd)/build.gradle,dst=/usr/b2b-rest-app/build.gradle --mount type=bind,src=$(pwd)/grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=$(pwd)/src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
 ```
 
 Alternatively, for more productivity, you may setup your own env, so, you need to install jdk8 and grails 4.0.3; 

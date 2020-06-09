@@ -40,8 +40,8 @@ class PartnerCommand implements Validateable {
         locale          nullable: false
         expirationTime  nullable: false
         locale validator: { loc, pc ->
-            if (loc.language == null || loc.language == "")  return ['language is mandatory']
-            if (loc.country == null || loc.country == "")  return ['country is mandatory']
+            if (loc.language == null || loc.language == "")  return ['country and language are mandatory']
+            if (loc.country == null || loc.country == "")  return ['country and language are mandatory']
         }
     }
 

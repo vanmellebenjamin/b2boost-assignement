@@ -1,6 +1,6 @@
 package b2boost.assignment
 
-
+import grails.validation.ValidationException
 import org.springframework.context.support.DefaultMessageSourceResolvable
 import org.springframework.http.HttpStatus
 
@@ -28,7 +28,8 @@ class ErrorController {
         // This is a POC, that's not a good design !
         // Todo nice GSON template to make a nice hashmap with errors. vnd.error ?
         StringBuilder sb = new StringBuilder()
-        for (DefaultMessageSourceResolvable resolvable : request.exception.cause.errors.allErrors) {
+        ValidationException validationException = unwrapValidationException(request.exception)
+        for (DefaultMessageSourceResolvable resolvable : validationException?.errors?.allErrors) {
             sb.append(MessageFormat.format(resolvable.defaultMessage, resolvable.getArguments()))
             sb.append(" (" + resolvable.code + "). ")
         }
@@ -50,6 +51,8 @@ class ErrorController {
      * between Functional Test and "grails run-app" is different
      * since the stack is not the same
      *
+     * todo Hopefully there are no Circular Error chains
+     *
      * @param throwable
      * @return the first message in the stack or "Undefined Error" if no message in the stack
      */
@@ -58,6 +61,13 @@ class ErrorController {
             throwable = throwable.getCause();
         }
         throwable != null ? throwable.getMessage() : "Undefined Error"
+    }
+
+    private static ValidationException unwrapValidationException(Throwable throwable) {
+        while (throwable != null && !(throwable instanceof ValidationException)) {
+            throwable = throwable.getCause()
+        }
+        throwable
     }
 
 }
