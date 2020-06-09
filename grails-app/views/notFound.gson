@@ -1,6 +1,6 @@
 response.status 404
 
 json {
-	message "Not Found"
-	error 404
+    code        404
+	message     "Resource does not exist"
 }

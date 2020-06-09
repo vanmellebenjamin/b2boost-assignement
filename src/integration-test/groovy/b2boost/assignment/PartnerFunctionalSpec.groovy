@@ -13,6 +13,7 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
+import java.time.Instant
 
 @Integration
 class PartnerFunctionalSpec extends Specification {
@@ -28,7 +29,17 @@ class PartnerFunctionalSpec extends Specification {
     void init() {
         String baseUrl = "http://localhost:$serverPort"
         print baseUrl
-        this.client  = HttpClient.create(new URL(baseUrl))
+        client  = HttpClient.create(new URL(baseUrl))
+    }
+
+    void setupData() {
+        for (int i = 1; i < 20; i++) {
+            new Partner(
+                companyName:    'company ' + i,
+                ref:            'xxxxx' + i,
+                locale:         Locale.UK,
+                expires:        Date.from(Instant.now())).save()
+        }
     }
 
     Map getValidJson() {
@@ -40,85 +51,124 @@ class PartnerFunctionalSpec extends Specification {
          ]
     }
 
-    Map getInvalidJson() {
+    Map getInvalidWrongDateJson() {
         [
-            "name"              : "",
-            "reference"         : "xxxxxx",
-            "locale"            : "en_ES",
-            "expirationTime"    : "2017-10-03T12:18:46+00:00"
+                "name"              : "Bells & Whistles",
+                "reference"         : "xxxxxx",
+                "locale"            : "en_ES",
+                "expirationTime"    : "2017-10-03T12:18:46+0:00"
         ]
     }
 
-    @SuppressWarnings('MethodName')
+    Map getInvalidWrongLocaleJson() {
+        [
+                "name"              : "Bells & Whistles",
+                "reference"         : "xxxxxx",
+                "locale"            : "en",
+                "expirationTime"    : "2017-10-03T12:18:46+00:00"
+        ]
+    }
+
     void 'Test the index action'() {
         when: 'The index action is requested'
-        HttpResponse<List<Map>> response = client.toBlocking()
-                .exchange(HttpRequest.GET(resourcePath), Argument.of(List, Map))
+            HttpResponse<List<Map>> response = client.toBlocking()
+                    .exchange(HttpRequest.GET(resourcePath), Argument.of(List, Map))
 
         then: 'The response is OK with an empty JSON array'
-        response.status == HttpStatus.OK
-        response.body() == []
-        response.headers
-        response.headers.nettyHeaders.headers.get("Content-Type")
-                .contains("application/json")
+            response.status == HttpStatus.OK
+            response.body() == []
+            response.headers
+            response.headers.nettyHeaders.headers.get("Content-Type")
+                    .contains("application/json")
     }
+    // todo from&size tests
 
-    @SuppressWarnings('MethodName')
-    void 'Test the show action correctly renders an instance'() {
-        when: 'The save action is executed with valid data'
-        HttpResponse<Map> response = client.toBlocking().exchange(HttpRequest.POST(resourcePath, validJson), Map)
-
-        then: 'The response is correct'
-        response.status == HttpStatus.CREATED
-        response.body().id
-
-        when: 'When the show action is called to retrieve a resource'
-        def id = response.body().id
-        String path = "${resourcePath}/${id}"
-        response = client.toBlocking().exchange(HttpRequest.GET(path), Map)
-
-        then: 'The response is correct and in JSON'
-        response.status == HttpStatus.OK
-        response.body().id == id
-        response.headers.nettyHeaders.headers.get("Content-Type")
-                .contains("application/json")
-    }
-
-    @SuppressWarnings('MethodName')
     @Rollback
-    void 'Test the save action correctly persists an instance'() {
-        when: 'The save action is executed with no content'
-        client.toBlocking().exchange(HttpRequest.POST(resourcePath, ''))
+    void 'Test that the show action correctly renders an instance'() {
+        given: 'Database contains partners'
+            setupData()
 
-        then: 'The response is correct'
-        def e = thrown(HttpClientResponseException)
-        e.response.status == HttpStatus.UNPROCESSABLE_ENTITY
-
-        when: 'The save action is executed with invalid data'
-        client.toBlocking().exchange(HttpRequest.POST(resourcePath, invalidJson))
-
-        then: 'The response is correct'
-        e = thrown(HttpClientResponseException)
-        e.response.status == HttpStatus.UNPROCESSABLE_ENTITY
-
-        when: 'The save action is executed with valid data'
-        HttpResponse<Map> response = client.toBlocking().exchange(HttpRequest.POST(resourcePath, validJson), Map)
+        when: 'The show action is called to retrieve a resource'
+            String path = "${resourcePath}/1"
+            response = client.toBlocking().exchange(HttpRequest.GET(path), Map)
 
         then: 'The response is correct and in JSON'
-        response.status == HttpStatus.CREATED
-        response.body().id
-        Partner.count() == 1
-        response.headers.nettyHeaders.headers.get("Content-Type")
-                .contains("application/json")
-
-//        cleanup:
-//        def id = response.body().id
-//        def path = "${resourcePath}/${id}"
-//        response = client.toBlocking().exchange(HttpRequest.DELETE(path))
-//        assert response.status() == HttpStatus.NO_CONTENT
+            response.status == HttpStatus.OK
+            response.body().id == 1
+            response.body().name == 'company1'
+            response.headers.nettyHeaders.headers.get("Content-Type")
+                    .contains("application/json")
     }
 
-//    @SuppressWarnings('MethodName')
+    void 'Test that the show action return not found if entity does not exist' () {
+        when: 'The show action is called to retrieve a non existing resource'
+            String path = "${resourcePath}/1"
+            client.toBlocking().exchange(HttpRequest.GET(path), Map)
+
+        then: 'The response is correct'
+            def e = thrown(HttpClientResponseException)
+            e.response.status == HttpStatus.NOT_FOUND
+            e.response.body().code == 404
+            e.response.body().message == "Partner with id 1 not found."
+    }
+
+    void 'Test that the save action correctly validate a non empty entity'() {
+        when: 'The save action is executed with no content'
+            client.toBlocking().exchange(HttpRequest.POST(resourcePath, ''), Map)
+
+        then: 'The response is correct'
+            def e = thrown(HttpClientResponseException)
+            e.response.status == HttpStatus.BAD_REQUEST
+            e.response.body().code == 400
+            e.response.body().message ==
+                    "Property [name] of class [class b2boost.assignment.partner.PartnerCommand] cannot be null (nullable). " +
+                    "Property [reference] of class [class b2boost.assignment.partner.PartnerCommand] cannot be null (nullable). " +
+                    "Property [locale] of class [class b2boost.assignment.partner.PartnerCommand] cannot be null (nullable). " +
+                    "Property [expirationTime] of class [class b2boost.assignment.partner.PartnerCommand] cannot be null (nullable). "
+            e.response.headers.get("Content-Type")
+                .contains("application/json")
+    }
+
+    void 'Test that the save action correctly validate a wrong locale'() {
+        when: 'The save action is executed with a wrong locale'
+            client.toBlocking().exchange(HttpRequest.POST(resourcePath, invalidWrongLocaleJson), Map)
+
+        then: 'The response is correct'
+            def e = thrown(HttpClientResponseException)
+            e.response.status == HttpStatus.BAD_REQUEST
+            e.response.body().code == 400
+            e.response.body().message == "Property [locale] of class [class b2boost.assignment.partner.PartnerCommand] " +
+                    "with value [en] does not pass custom validation (country is mandatory). "
+            e.response.headers.get("Content-Type")
+                .contains("application/json")
+    }
+
+    void 'Test that the save action correctly validate a wrong date'() {
+        when: 'The save action is executed with a wrong date'
+            client.toBlocking().exchange(HttpRequest.POST(resourcePath, invalidWrongDateJson), Map)
+
+        then: 'The response is correct'
+            def e = thrown(HttpClientResponseException)
+            e.response.status == HttpStatus.BAD_REQUEST
+            e.response.body().code == 400
+            e.response.body().message == "Unparseable date: \"2017-10-03T12:18:46+0:00\" (typeMismatch). "
+            e.response.headers.get("Content-Type")
+                .contains("application/json")
+    }
+
+    @Rollback
+    void 'Test that the save action correctly persists an instance'() {
+        when: 'The save action is executed with valid data'
+            HttpResponse<Map> response = client.toBlocking().exchange(HttpRequest.POST(resourcePath, validJson), Map)
+
+        then: 'The response is correct and in JSON'
+            response.status == HttpStatus.CREATED
+            response.body().id
+            Partner.count() == 1
+            response.headers.nettyHeaders.headers.get("Content-Type")
+                    .contains("application/json")
+    }
+
 //    void 'Test the update action correctly updates an instance'() {
 //        when: 'The save action is executed with valid data'
 //        HttpResponse<Map> response = client.toBlocking().exchange(HttpRequest.POST(resourcePath, validJson), Map)

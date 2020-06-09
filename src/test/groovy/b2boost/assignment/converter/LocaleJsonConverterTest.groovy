@@ -16,18 +16,18 @@ class LocaleJsonConverterTest extends Specification {
 
     void "test to convert a locale that contains language only"() {
         when: "calling GET /api/partners"
-        String locale = localeJsonConverter.convert(new Locale("en", ""), null)
+            String locale = localeJsonConverter.convert(new Locale("en", ""), null)
 
         then: "the format is correct"
-        locale == "en"
+            locale == "en"
     }
 
     void "test to convert a locale that contains language and country"() {
         when: "calling GET /api/partners"
-        String locale = localeJsonConverter.convert(new Locale("en", "GB"), null)
+            String locale = localeJsonConverter.convert(new Locale("en", "GB"), null)
 
         then: "the format is correct"
-        locale == "en_GB"
+            locale == "en_GB"
     }
 
 }

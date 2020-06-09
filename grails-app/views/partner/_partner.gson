@@ -6,9 +6,9 @@ model {
 }
 
 json {
-    id partner.id
-    name partner.companyName
-    reference partner.ref
-    locale partner.locale
-    expirationTime partner.expires
+    id              partner.id
+    name            partner.companyName
+    reference       partner.ref
+    locale          partner.locale
+    expirationTime  partner.expires
 }

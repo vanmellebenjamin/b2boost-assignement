@@ -1,13 +1,19 @@
 package b2boost.assignment.partner
 
-import grails.compiler.GrailsCompileStatic
+import grails.validation.Validateable
 
-@GrailsCompileStatic //TODO check why intelliJ complains
-class Partner {
+class Partner implements Validateable {
 
     String companyName
     String ref
     Locale locale
     Date expires
+
+    static constraints = {
+        companyName nullable: false, blank: false
+        ref         nullable: false, blank: false
+        locale      nullable: false
+        expires     nullable: false
+    }
 
 }

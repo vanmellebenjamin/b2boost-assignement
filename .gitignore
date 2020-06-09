@@ -6,7 +6,7 @@
 .gradle/
 .asscache
 build/
-out
-logs
-classes
+out/
+logs/
+classes/
 test-results/

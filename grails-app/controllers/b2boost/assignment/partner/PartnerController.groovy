@@ -1,45 +1,36 @@
 package b2boost.assignment.partner
 
-import grails.validation.ValidationException
 import org.springframework.http.HttpStatus
+
+import java.time.Instant
 
 class PartnerController {
 
-    def partnerDataService
+    def partnerService
 
-    def index(Integer from, Integer max) {
-        log.info "index"
-        // params.max = Math.min(max ?: 10, 100)
-        respond partnerDataService.findAll([max: max, offset: from])
+    def index(Integer from, Integer size) {
+        for (int i = 1; i < 2; i++) {
+            Date date = Date.from(Instant.now())
+            new Partner(
+                    companyName:    'company X',
+                    ref:            'xxxxx',
+                    locale:         Locale.UK,
+                    expires:        date).save()
+        }
+        respond partnerService.findAll([max: size, offset: from])
     }
 
     def show() {
-        log.info "show"
-        partner = partnerDataService.find(params.id)
-        if (partner == null) {
-            render status: HttpStatus.NOT_FOUND
-            return
-        }
-        respond partner
+        respond partnerService.find(params.id)
     }
 
     def save(PartnerCommand partnerCommand) {
-        log.info "save"
-        try {
-            partner = partnerDataService.save(partnerCommand as Partner)
-            respond partner, status: HttpStatus.CREATED
-        } catch (ValidationException e) {
-            respond e, status: HttpStatus.BAD_REQUEST
-        }
+        respond partnerService.save(partnerCommand), status: HttpStatus.CREATED
     }
 
+    // todo
     def update(PartnerCommand partnerCommand) {
-        log.info "update"
-        if (partnerCommand == null) {
-            render status: HttpStatus.BAD_REQUEST
-            return
-        }
-        ​Partner partner = partnerDataService.find(params.id)
+        ​Partner partner = partnerService.find(params.id)
         if (partner == null) {
             render status: HttpStatus.NOT_FOUND
             return
@@ -48,14 +39,9 @@ class PartnerController {
         respond partner.save
     }
 
+    // todo
     def delete() {
-        log.info "delete"
-        Partner partner = partnerDataService.find(params.id)
-        if (partner == null) {
-            render status: HttpStatus.NOT_FOUND
-            return
-        }
-        respond partner.delete()
+        respond partnerService.delete(params.id)
     }
 
 }

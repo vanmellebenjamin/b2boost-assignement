@@ -3,10 +3,6 @@
 
 [![Grails Version][grails-image]][grails-url]
 
-## Requirements
-
-A running docker agent with an internet connection
-
 ## Checklist
 
 - [ ] The endpoint will return custom error JSON messages in the payload, additionally to the standard HTTP response codes
@@ -20,13 +16,23 @@ A running docker agent with an internet connection
 - [ ] The application will have suitable functional tests
 - [ ] No authentication/security necessary
 
+## Remarks
+Some ways to improve:
+- https://github.com/grails/gorm-hibernate5/issues/55 : there is an open issue for 3 years, about usage of deprecated hibernateL.Criteria
+- Use Java 8 ZonedDateTime instead of util.Date (by using java8-plugin)
+- Implement a GSON view to have a nice Json showing Validation errors
+- Exception handling in exception controller - got an issue, because of a different behaviour between functional test & "grails run-app" (see comment)
+
+## Requirements
+
+A running docker agent with an internet connection. The Port 8080, must be available.
 
 ## Installation
 
-OS X & Linux & Windows:
+OS X & Linux & Windows (to execute in the project directory):
 ```sh
 docker build -t bvanmelle/b2b-assignment .
-docker run -it -p 8080:8080 bvanmelle/b2b-assignment grails
+docker run -it -p 8080:8080 bvanmelle/b2b-assignment
 ```
 Once Grails command line open, you can then run grails commands:
 - run-app
@@ -37,12 +43,6 @@ Once Grails command line open, you can then run grails commands:
 ## Health check
 
 Standard SpringBoot HealthCheck can be reached at the URL: /actuator/health
-
-## Partners API
-
-```sh
-curl http://localhost:8080/..
-```
 
 ## Development setup
 
@@ -57,7 +57,7 @@ OS X & Linux (not verify yet):
 docker run -it --mount type=bind,src=$(pwd)/test-results,dst=/usr/b2b-rest-app/build/test-results --mount type=bind,src=$(pwd)/build.gradle,dst=/usr/b2b-rest-app/build.gradle --mount type=bind,src=$(pwd)/grails-app,dst=/usr/b2b-rest-app/grails-app --mount type=bind,src=$(pwd)/src,dst=/usr/b2b-rest-app/src -p 8080:8080 bvanmelle/b2b-assignment grails
 ```
 
-Alternatively, if you wish to develop in you own env, you need to install jdk8 and grails 4.0.3; 
+Alternatively, for more productivity, you may setup your own env, so, you need to install jdk8 and grails 4.0.3; 
 See: http://docs.grails.org/latest/guide/gettingStarted.html
 
 Run the tests:

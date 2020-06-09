@@ -6,3 +6,4 @@ ENV PATH=$PATH:$GRAILS_HOME/bin
 WORKDIR /usr/b2b-rest-app
 ADD . .
 RUN grails package
+ENTRYPOINT grails

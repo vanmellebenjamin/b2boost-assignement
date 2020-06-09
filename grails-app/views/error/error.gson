@@ -1,0 +1,9 @@
+model {
+    Serializable    code
+    Serializable    exceptionMessage
+}
+
+json {
+    code    code
+    message exceptionMessage
+}
