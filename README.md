@@ -42,8 +42,7 @@ docker run -it -p 8080:8080 --mount type=bind,src=$(pwd)/reports,dst=/usr/b2b-re
 
 Once Grails command line open, you can then run grails commands:
 - run-app
-- test-app	
-- test-app --integration
+- test-app (html reports will be under the reports folder)
 - package (You need to mount a volume on Docker to get the build output)
 
 ## Health check
