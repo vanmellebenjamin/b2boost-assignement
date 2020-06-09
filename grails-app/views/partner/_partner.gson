@@ -1,5 +1,4 @@
 import b2boost.assignment.partner.Partner
-import b2boost.assignment.converter.LocaleJsonConverter
 
 model {
 	Partner partner
@@ -9,6 +8,6 @@ json {
     id              partner.id
     name            partner.companyName
     reference       partner.ref
-    locale          partner.locale
+    locale          partner.locale?.toString()
     expirationTime  partner.expires
 }

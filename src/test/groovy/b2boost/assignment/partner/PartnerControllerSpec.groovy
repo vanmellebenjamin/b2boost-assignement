@@ -12,7 +12,7 @@ class PartnerControllerSpec extends Specification implements ControllerUnitTest<
 
     def "test PartnerController.save accepts POST requests"() {
         given: 'partner service works fine'
-            controller.partnerDataService = Mock(PartnerDataService)
+            controller.partnerService = Mock(PartnerService)
 
         when: 'save is called'
             request.method = 'POST'
@@ -20,23 +20,6 @@ class PartnerControllerSpec extends Specification implements ControllerUnitTest<
 
         then: 'response status is created'
             response.status == SC_CREATED
-    }
-
-    def "test PartnerController.save return bad request if Validation exception occurs"() {
-        given: 'partner service will throw an exception'
-            controller.partnerDataService = Mock(PartnerDataService)
-            controller.partnerDataService.save(_ as Partner) >> {
-                Errors errors = Mock(Errors)
-                errors.getAllErrors() >> []
-                throw new ValidationException("error", errors)
-            }
-
-        when: 'save is called'
-            request.method = 'POST'
-            controller.save(new PartnerCommand())
-
-        then: 'response status is BAD request'
-            response.status == SC_BAD_REQUEST
     }
 
     // Todo implement tests for each action

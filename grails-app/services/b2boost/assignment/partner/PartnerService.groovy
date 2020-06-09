@@ -14,7 +14,7 @@ class PartnerService {
     @Transactional
     Partner save(PartnerCommand partnerCommand) {
         if(partnerCommand.hasErrors()) {
-            throw new ValidationException("Validation Error", partnerCommand.getErrors())
+            throw new ValidationException("PartnerCommand Validation Error", partnerCommand.getErrors())
         }
         partnerDataService.save(partnerCommand as Partner)
     }
@@ -30,15 +30,19 @@ class PartnerService {
 
     @Transactional
     Partner update(Serializable id, PartnerCommand partnerCommand) {
-        partnerCommand.validate()
         Partner partner = partnerDataService.get(id)
-        // todo copy fields
-        partner.with {
-            companyName: partnerCommand.name
-            ref: partnerCommand.reference
-            locale: partnerCommand.locale
-            expires: partnerCommand.expirationTime
+        if (partner == null) {
+            throw new PartnerNotFoundException(id);
         }
+        if(partnerCommand.hasErrors()) {
+            throw new ValidationException("PartnerCommand Validation Error", partnerCommand.getErrors())
+        }
+
+        partner.companyName = partnerCommand.name
+        partner.ref = partnerCommand.reference
+        partner.locale = partnerCommand.locale
+        partner.expires = partnerCommand.expirationTime
+
         partnerDataService.save(partner)
     }
 

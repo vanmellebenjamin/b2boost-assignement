@@ -2,7 +2,7 @@ package b2boost.assignment.partner
 
 import spock.lang.Specification
 
-import java.time.Instant
+import java.time.ZonedDateTime
 
 class PartnerCommandSpec extends Specification {
 
@@ -12,14 +12,14 @@ class PartnerCommandSpec extends Specification {
                     name: 'Bells & Whistles',
                     reference: 'xxxxxx',
                     locale: Locale.UK,
-                    expirationTime: Date.from(Instant.now()))
+                    expirationTime: ZonedDateTime.now())
 
         when: 'partnerCommand is converted to partner'
             Partner partner = partnerCommand as Partner
 
         then: 'properties are well converted'
             partner.properties.size() == 4
-            partnerCommand.properties.size() - 3 == partner.properties.size()
+            partnerCommand.properties.size() - 4 == partner.properties.size()
             partnerCommand.name == partner.companyName
             partnerCommand.reference == partner.ref
             partnerCommand.locale == partner.locale

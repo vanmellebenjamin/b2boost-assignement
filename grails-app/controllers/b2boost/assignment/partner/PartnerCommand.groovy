@@ -4,12 +4,14 @@ import grails.databinding.BindingFormat
 import grails.validation.Validateable
 import groovy.transform.CompileDynamic
 
+import java.time.ZonedDateTime
+
 class PartnerCommand implements Validateable {
     String name
     String reference
     Locale locale
-    @BindingFormat("yyyy-MM-dd'T'HH:mm:ssX")
-    Date expirationTime
+    @BindingFormat("yyyy-MM-dd'T'HH:mm:ssXXX")
+    ZonedDateTime expirationTime
 
 
     Object asType(Class clazz) {

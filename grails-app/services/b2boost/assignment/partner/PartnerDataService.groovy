@@ -16,6 +16,8 @@ interface PartnerDataService {
      */
     List<Partner> list(Map args)
 
+
+
     void delete(Serializable id)
 
     Partner save(Partner partner)

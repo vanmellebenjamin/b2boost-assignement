@@ -2,24 +2,24 @@
 > https://b2boost.bitbucket.io/grails-problem-1/
 
 [![Grails Version][grails-image]][grails-url]
+![Code Coverage][code-coverage]
 
 ## Checklist
 
-- [ ] The endpoint will return custom error JSON messages in the payload, additionally to the standard HTTP response codes
-- [ ] The controller of the endpoint will not contain any business logic, and will limit itself to
-- [ ] marshalling data from the http layer to the service layer (using grails Command objects)
-- [ ] reporting error conditions in the response
-- [ ] marshalling results back to the http layer, including custom errors
-- [ ] The service layer will be transactional and encapsulate all validation and database interactions
-- [ ] The application will run with an embedded H2 in-memory database
-- [ ] The application will have a health check endpoint
-- [ ] The application will have suitable functional tests
-- [ ] No authentication/security necessary
+- [X] The endpoint will return custom error JSON messages in the payload, additionally to the standard HTTP response codes
+- [X] The controller of the endpoint will not contain any business logic, and will limit itself to
+- [X] marshalling data from the http layer to the service layer (using grails Command objects)
+- [x] reporting error conditions in the response
+- [x] marshalling results back to the http layer, including custom errors
+- [x] The service layer will be transactional and encapsulate all validation and database interactions
+- [x] The application will run with an embedded H2 in-memory database
+- [x] The application will have a health check endpoint
+- [x] The application will have suitable functional tests
+- [x] No authentication/security necessary
 
 ## Remarks
 Some ways to improve:
 - https://github.com/grails/gorm-hibernate5/issues/55 : there is an open issue for 3 years, about usage of deprecated hibernateL.Criteria
-- Use Java 8 ZonedDateTime instead of util.Date (by using java8-plugin)
 - Implement a GSON view to have a nice Json showing Validation errors
 - Exception handling in exception controller - got an issue, because of a different behaviour between functional test & "grails run-app" (see comment)
 
@@ -74,5 +74,6 @@ grails run-app
 Benjamin Van Melle – [@LinkedIn](https://www.linkedin.com/in/benjaminvm/) – vanmelle.benjamin@gmail.com
 
 <!-- Markdown link & img dfn's -->
-[grails-image]: https://img.shields.io/badge/Grails-4.0.3-blue
+[grails-image]: https://img.shields.io/badge/Grails-4.0.3-green
 [grails-url]: https://docs.grails.org/4.0.3/guide/single.html
+[code-coverage]: https://img.shields.io/badge/Coverage-96%25-green

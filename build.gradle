@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-version "0.1"
+version "1.0"
 group "b2boost.assignment"
 
 apply plugin:"eclipse"
