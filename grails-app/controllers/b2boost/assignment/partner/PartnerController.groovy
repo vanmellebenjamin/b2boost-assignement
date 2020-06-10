@@ -1,8 +1,10 @@
 package b2boost.assignment.partner
 
+import b2boost.assignment.partner.exception.PartnerNotFoundException
+import grails.validation.ValidationException
 import org.springframework.http.HttpStatus
 
-class PartnerController {
+class PartnerController implements PartnerExceptionHandler {
     static responseFormats = ['json']
 
     def partnerService
@@ -16,16 +18,32 @@ class PartnerController {
     }
 
     def save(PartnerCommand partnerCommand) {
-        respond partnerService.save(partnerCommand), status: HttpStatus.CREATED
+        try {
+            respond partnerService.save(partnerCommand), status: HttpStatus.CREATED
+        } catch (ValidationException validationException) {
+            handleValidationException(validationException)
+        } catch (PartnerNotFoundException partnerNotFoundException) {
+            handlePartnerNotFoundException(partnerNotFoundException)
+        }
     }
 
     def update(PartnerCommand partnerCommand) {
-        respond partnerService.update(params.id, partnerCommand), status: HttpStatus.OK
+        try {
+            respond partnerService.update(params.id, partnerCommand), status: HttpStatus.OK
+        } catch (ValidationException validationException) {
+            handleValidationException(validationException)
+        } catch (PartnerNotFoundException partnerNotFoundException) {
+            handlePartnerNotFoundException(partnerNotFoundException)
+        }
     }
 
     def delete() {
-        partnerService.delete(params.id)
-        respond status: HttpStatus.OK
+        try {
+            partnerService.delete(params.id)
+            respond status: HttpStatus.OK
+        } catch (PartnerNotFoundException partnerNotFoundException) {
+            handlePartnerNotFoundException(partnerNotFoundException)
+        }
     }
 
 }

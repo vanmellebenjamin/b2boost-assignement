@@ -21,7 +21,6 @@
 Some ways to improve:
 - https://github.com/grails/gorm-hibernate5/issues/55 : there is an open issue for 3 years, about usage of deprecated hibernateL.Criteria
 - Implement a GSON view to have a nice Json showing Validation errors
-- Exception handling in exception controller - got an issue, because of a different behaviour between functional test & "grails run-app" (see comment)
 
 ## Requirements
 
